@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NueipUser;
+use App\Service\NueipService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Crypt;
 
@@ -42,7 +44,6 @@ class NueipRequest extends FormRequest
 
     public function getInput()
     {
-        // TODO: 打 Nueip 登入 判斷資訊是否正確
         $data = parent::all();
         return [
             'company' => $data['company'],
