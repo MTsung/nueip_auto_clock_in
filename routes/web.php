@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NueipController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,16 +14,25 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('home'));
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware(['auth'])->group(function () {
+    Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::prefix('setting/')->group(function () {
+        Route::get('nueip', [NueipController::class, 'index']);
+        Route::post('nueip', [NueipController::class, 'save']);
+        Route::get('blacklist-days', [HomeController::class, 'index']);
+        Route::get('line-notify', [HomeController::class, 'index']);
+    });
+    Route::get('logs', [HomeController::class, 'index']);
+});
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::prefix('callback/')->group(function () {
+    Route::post('line-notify', [HomeController::class, 'index']);
+});
