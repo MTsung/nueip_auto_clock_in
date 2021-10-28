@@ -24,8 +24,8 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
-    Route::prefix('setting/')->group(function () {
-        Route::get('nueip', [NueipController::class, 'index']);
+    Route::prefix('setting/')->name('setting.')->group(function () {
+        Route::get('nueip', [NueipController::class, 'index'])->name('nueip');
         Route::post('nueip', [NueipController::class, 'save']);
         Route::get('blacklist-days', [HomeController::class, 'index']);
         Route::get('line-notify', [HomeController::class, 'index']);
