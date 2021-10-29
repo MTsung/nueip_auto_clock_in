@@ -5,7 +5,6 @@ namespace App\Service;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\TransferStats;
-use Illuminate\Support\Facades\Auth;
 
 class NueipService
 {
