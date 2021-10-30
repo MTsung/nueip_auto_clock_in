@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Service\ClockLogService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -19,6 +20,7 @@ class HomeController extends Controller
     {
         $date = Carbon::parse($request->input('date') ?? '')->startOfDay();
         $logs = $this->clockLogService->getLogs(0, $date);
-        return view('home', compact('logs'));
+        $setting = Auth::user()->setting;
+        return view('home', compact('logs', 'setting'));
     }
 }

@@ -18,6 +18,8 @@ class CreateUserSettingTable extends Migration
             $table->string('line_notify_token')->nullable();
             $table->tinyInteger('auto_clock_in')->default(0);
             $table->tinyInteger('auto_clock_out')->default(0);
+            $table->time('clock_in_time')->nullable();
+            $table->time('clock_out_time')->nullable();
             $table->double('lat')->default(0)->comment('打卡位置');
             $table->double('lng')->default(0)->comment('打卡位置');
             $table->timestamps();
