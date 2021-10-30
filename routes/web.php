@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\NueipController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('blacklist-days', [HomeController::class, 'index']);
         Route::get('line-notify', [HomeController::class, 'index']);
     });
-    Route::get('logs', [HomeController::class, 'index']);
+    Route::get('logs', [LogController::class, 'index'])->name('logs');
 });
 
 Route::prefix('callback/')->group(function () {

@@ -22,4 +22,14 @@ class ClockLogRepository
         ];
         $this->module()->query()->create($params);
     }
+
+    public function getLogs($user_id)
+    {
+        return $this->module()
+            ->query()
+            ->where('user_id', $user_id)
+            ->orderBy('id', 'desc')
+            ->limit(50)
+            ->get();
+    }
 }

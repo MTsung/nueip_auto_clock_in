@@ -61,6 +61,9 @@
                                     <a class="dropdown-item" href="{{ route('setting.nueip') }}">
                                         {{ __('NUEiP 設定') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('logs') }}">
+                                        {{ __('紀錄') }}
+                                    </a>
                                     
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

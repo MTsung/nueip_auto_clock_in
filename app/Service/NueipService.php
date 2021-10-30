@@ -75,7 +75,9 @@ class NueipService
             'id' => 1,
             'attendance_time' => Carbon::now()->toDateTimeString(),
             'token' => $token,
+            // TODO: $this->user->setting->lat
             'lat' => '25.0776031',
+            // TODO: $this->user->setting->lng
             'lng' => '121.5751335',
         ];
         $this->callApi($fromData);
