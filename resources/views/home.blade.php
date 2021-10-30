@@ -1,21 +1,73 @@
 @extends('layouts.app')
 
 @section('content')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_green.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('紀錄') }}</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
+                    <div class="row">
+                        <div class="col-lg-4 mb-3">
+                            <input data-type='flatpickr' class="d-none"
+                                value="{{ request('date') ?? Carbon\Carbon::today()->toDateString() }}">
                         </div>
-                    @endif
+                        <div class="col-lg-8">
 
-                    {{ __('You are logged in!') }}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">{{ __('類型') }}</th>
+                                        <th scope="col">{{ __('狀態') }}</th>
+                                        <th scope="col">{{ __('訊息') }}</th>
+                                        <th scope="col">{{ __('時間') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($logs as $log)
+                                        <tr>
+                                            <th scope="row">{{ $log->id }}</th>
+                                            <td>{{ __('log.type.' . $log->type) }}</td>
+                                            <td>{{ $log->status }}</td>
+                                            <td>{{ $log->message }}</td>
+                                            <td>{{ $log->created_at }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        flatpickr("input[data-type='flatpickr']", {
+            dateFormat: "Y-m-d",
+            enableTime: false,
+            inline: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                location.href = '{{ route('home') }}?date=' + formatDate(selectedDates[0]);
+            },
+        });
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    </script>
 @endsection

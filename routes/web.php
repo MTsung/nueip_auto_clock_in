@@ -36,7 +36,6 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('', [LineNotifyController::class, 'del'])->name('del');
         });
     });
-    Route::get('logs', [LogController::class, 'index'])->name('logs');
 });
 
 Route::prefix('callback/')->group(function () {

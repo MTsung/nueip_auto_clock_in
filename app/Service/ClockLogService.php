@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Repository\ClockLogRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class ClockLogService
@@ -14,8 +15,8 @@ class ClockLogService
         $this->repository = $repository;
     }
 
-    public function getLogs($id = 0)
+    public function getLogs($id = 0, Carbon $date)
     {
-        return $this->repository->getLogs($id ?: Auth::id());
+        return $this->repository->getLogs($id ?: Auth::id(), $date);
     }
 }

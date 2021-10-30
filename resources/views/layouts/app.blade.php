@@ -64,9 +64,6 @@
                                     <a class="dropdown-item" href="{{ route('setting.line-notify.index') }}">
                                         {{ __('LINE Notify 綁定') }}
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('logs') }}">
-                                        {{ __('打卡紀錄') }}
-                                    </a>
                                     
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
