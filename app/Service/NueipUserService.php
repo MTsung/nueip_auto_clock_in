@@ -21,9 +21,9 @@ class NueipUserService
         return (bool) $check;
     }
 
-    public function getUser()
+    public function getUser($id = 0)
     {
-        return $this->repository->find(Auth::id());
+        return $this->repository->find($id ?: Auth::id());
     }
 
     public function save($params)
