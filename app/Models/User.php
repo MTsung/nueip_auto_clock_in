@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(NueipUser::class);
     }
+
+    public function setting()
+    {
+        return $this->hasOne(UserSetting::class);
+    }
 }

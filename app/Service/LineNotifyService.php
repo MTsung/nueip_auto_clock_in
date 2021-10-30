@@ -60,7 +60,7 @@ class LineNotifyService
             "state" => "csrf_token",
         ];
         $url = $url . "?" . http_build_query($data);
-        header("Location: " . $url);
+        return redirect()->to($url);
     }
 
     /**
@@ -167,11 +167,11 @@ class LineNotifyService
         $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $header = substr($response, 0, $headerSize);
         $this->apiRateLimit = [ //API Rate Limit
-            "X-RateLimit-Limit" => (int) explode("X-RateLimit-Limit:", $header)[1],
-            "X-RateLimit-Remaining" => (int) explode("X-RateLimit-Remaining:", $header)[1],
-            "X-RateLimit-ImageLimit" => (int) explode("X-RateLimit-ImageLimit:", $header)[1],
-            "X-RateLimit-ImageRemaining" => (int) explode("X-RateLimit-ImageRemaining:", $header)[1],
-            "X-RateLimit-Reset" => (int) explode("X-RateLimit-Reset:", $header)[1],
+            "X-RateLimit-Limit" => (int) (explode("X-RateLimit-Limit:", $header)[1] ?? 0),
+            "X-RateLimit-Remaining" => (int) (explode("X-RateLimit-Remaining:", $header)[1] ?? 0),
+            "X-RateLimit-ImageLimit" => (int) (explode("X-RateLimit-ImageLimit:", $header)[1] ?? 0),
+            "X-RateLimit-ImageRemaining" => (int) (explode("X-RateLimit-ImageRemaining:", $header)[1] ?? 0),
+            "X-RateLimit-Reset" => (int) (explode("X-RateLimit-Reset:", $header)[1] ?? 0),
         ];
 
         $response = substr($response, $headerSize);

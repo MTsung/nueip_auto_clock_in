@@ -4,7 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('紀錄') }}</div>
+                <div class="card-header">{{ __('打卡紀錄') }}</div>
 
                 <div class="card-body">
                     <table class="table">
@@ -14,6 +14,7 @@
                                 <th scope="col">{{ __('類型') }}</th>
                                 <th scope="col">{{ __('狀態') }}</th>
                                 <th scope="col">{{ __('訊息') }}</th>
+                                <th scope="col">{{ __('時間') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -23,6 +24,7 @@
                                     <td>{{ __('log.type.' . $log->type) }}</td>
                                     <td>{{ $log->status }}</td>
                                     <td>{{ $log->message }}</td>
+                                    <td>{{ $log->created_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

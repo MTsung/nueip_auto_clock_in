@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LineNotifyController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\NueipController;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +30,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('nueip', [NueipController::class, 'index'])->name('nueip');
         Route::post('nueip', [NueipController::class, 'save']);
         Route::get('blacklist-days', [HomeController::class, 'index']);
-        Route::get('line-notify', [HomeController::class, 'index']);
+        Route::prefix('line-notify/')->name('line-notify.')->group(function () {
+            Route::get('', [LineNotifyController::class, 'index'])->name('index');
+            Route::get('bind', [LineNotifyController::class, 'bind'])->name('bind');
+            Route::delete('', [LineNotifyController::class, 'del'])->name('del');
+        });
     });
     Route::get('logs', [LogController::class, 'index'])->name('logs');
 });
 
 Route::prefix('callback/')->group(function () {
-    Route::post('line-notify', [HomeController::class, 'index']);
+    Route::get('line-notify', [LineNotifyController::class, 'callback']);
 });

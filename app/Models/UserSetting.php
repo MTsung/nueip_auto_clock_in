@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class NueipUser extends Model
+class UserSetting extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
+    
+    public $timestamps = true;
     
     public $incrementing = false;
 
     protected $primaryKey = 'user_id';
 
-    protected $table = 'nueip_user';
+    protected $table = 'user_setting';
 
     protected $fillable = [];
 
