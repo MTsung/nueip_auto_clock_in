@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SaveSettingRequest;
 use App\Service\CalendarDateService;
 use App\Service\ClockLogService;
+use App\Service\NueipUserService;
 use App\Service\UserSettingService;
 use Carbon\Carbon;
 use Exception;
@@ -16,12 +17,14 @@ class HomeController extends Controller
     private $clockLogService;
     private $calendarDateService;
     private $userSettingService;
+    private $nueipUserService;
 
-    public function __construct(ClockLogService $clockLogService, CalendarDateService $calendarDateService, UserSettingService $userSettingService)
+    public function __construct(ClockLogService $clockLogService, CalendarDateService $calendarDateService, UserSettingService $userSettingService, NueipUserService $nueipUserService)
     {
         $this->clockLogService = $clockLogService;
         $this->calendarDateService = $calendarDateService;
         $this->userSettingService = $userSettingService;
+        $this->nueipUserService = $nueipUserService;
     }
 
     public function index(Request $request)
@@ -38,6 +41,10 @@ class HomeController extends Controller
 
     public function saveSetting(SaveSettingRequest $request)
     {
+        if (!$this->nueipUserService->userExist()) {
+            return redirect(route('setting.nueip'))->with('error', '請先設定 NUEiP 帳號');
+        }
+        
         $input = $request->getInput();
         try {
             Auth::user()->setting()->update($input);

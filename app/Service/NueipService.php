@@ -139,10 +139,11 @@ class NueipService
 
     private function clockLogin()
     {
-        $id = $this->user->id ?? Auth::id();
-        if (!$user = $this->nueipUserService->getUser($id)) {
-            throw new Exception('user_id:' . $id . '. nueip info is null');
+        $id = $this->user->id;
+        if (!$this->nueipUserService->userExist($id)) {
+            throw new Exception('nueip info is null');
         }
+        $user = $this->nueipUserService->getUser($id);
         $company = $user['company'];
         $account = $user['account'];
         $password = Crypt::decryptString($user['password']);

@@ -14,9 +14,9 @@ class NueipUserService
         $this->repository = $repository;
     }
 
-    public function userExist()
+    public function userExist($id = 0)
     {
-        $user = $this->getUser();
+        $user = $this->getUser($id);
         $check = strlen($user->company) * strlen($user->account) * strlen($user->password);
         return (bool) $check;
     }
