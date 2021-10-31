@@ -2,8 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\ClockLog;
 use App\Models\User;
 use App\Service\NueipService;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,13 +41,23 @@ class ClockInJob implements ShouldQueue
     {
         $nueipService = app(NueipService::class);
         $nueipService = $nueipService->setUser(User::find($this->user_id));
-        switch ($this->type) {
-            case '1':
-                $nueipService->clockIn();
-                break;
-            case '2':
-                $nueipService->clockOut();
-                break;
+        try {
+            switch ($this->type) {
+                case '1':
+                    $nueipService->clockIn();
+                    break;
+                case '2':
+                    $nueipService->clockOut();
+                    break;
+            }
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            ClockLog::query()->create([
+                'user_id' => $this->user_id,
+                'type' => $this->type,
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ]);
         }
     }
 }
