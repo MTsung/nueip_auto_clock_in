@@ -26,6 +26,7 @@ Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
+    Route::post('home', [HomeController::class, 'saveSetting'])->name('saveSetting');
     Route::prefix('setting/')->name('setting.')->group(function () {
         Route::get('nueip', [NueipController::class, 'index'])->name('nueip');
         Route::post('nueip', [NueipController::class, 'save']);
