@@ -99,6 +99,8 @@ class NueipService
 
     public function callApi($fromData)
     {
+        Log::info($this->clockUrl, [$fromData]);
+        return false;
         try {
             $client = new Client(['timeout' => 5, 'verify' => false]);
             $res = $client->post($this->clockUrl, [
@@ -106,7 +108,7 @@ class NueipService
                 'cookies' => $this->cookie,
             ]);
             $res = json_decode($res->getBody()->getContents(), true);
-            Log::info($this->clockUrl . ' res: ', [$res]);
+            Log::info($this->clockUrl, [$fromData, $res]);
             $this->sendLineNotify($res);
             $this->clockLogRepository->addLog($this->user->id, $res, $fromData);
         } catch (Exception $e) {
@@ -160,6 +162,7 @@ class NueipService
         if ($res->getStatusCode() == 200) {
             $html = $res->getBody()->getContents();
             $dom = new DOMDocument();
+            libxml_use_internal_errors(true);
             $dom->loadHTML($html);
             $xp = new DOMXPath($dom);
             $token = $xp->query('//input[@name="token"]')->item(0)->getAttribute('value');
