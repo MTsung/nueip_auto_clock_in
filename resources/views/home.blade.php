@@ -4,70 +4,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_green.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <style>
-        /**
-                    * 開關
-                    */
-        .onoffswitch {
-            position: relative;
-            width: 50px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        .onoffswitch-checkbox {
-            display: none;
-        }
-
-        .onoffswitch-label {
-            display: block;
-            overflow: hidden;
-            cursor: pointer;
-            height: 19px;
-            padding: 0;
-            line-height: 19px;
-            border: 2px solid #E3E3E3;
-            border-radius: 19px;
-            background-color: #FFFFFF;
-            transition: background-color 0.2s ease-in;
-        }
-
-        .onoffswitch-label:before {
-            font-family: 'Glyphicons Halflings';
-            content: "";
-            display: block;
-            width: 21px;
-            margin: 0px;
-            background: #FFFFFF;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 29px;
-            border: 2px solid #E3E3E3;
-            border-radius: 19px;
-            transition: all 0.2s ease-in 0s;
-        }
-
-        .onoffswitch-checkbox:checked+.onoffswitch-label {
-            background-color: #49E845;
-        }
-
-        .onoffswitch-checkbox:checked+.onoffswitch-label,
-        .onoffswitch-checkbox:checked+.onoffswitch-label:before {
-            border-color: #49E845;
-        }
-
-        .onoffswitch-checkbox:checked+.onoffswitch-label:before {
-            right: 0px;
-        }
-
-    </style>
-
+    
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">{{ Carbon\Carbon::today()->toDateString() }}</div>
+            <div class="card mb-3">
+                <div class="card-header">
+                    @if (isset($dateStatus->date))
+                        {{ $dateStatus->date }} ({{ $dateStatus->is_work_day ? '工作日' : '休假' }})
+                    @else
+                        {{ request('date') ?? Carbon\Carbon::today()->toDateString() }}
+                    @endif
+                </div>
 
                 <div class="card-body">
                     <div class="row">
@@ -101,6 +48,13 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+                    
+            <div class="card">
+                <div class="card-header">{{ __('打卡設定') }}</div>
+
+                <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4 mb-3">
                             <form method="POST">

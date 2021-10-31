@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('setting/')->name('setting.')->group(function () {
         Route::get('nueip', [NueipController::class, 'index'])->name('nueip');
         Route::post('nueip', [NueipController::class, 'save']);
+        // TODO: 獨立不打卡日
         Route::get('blacklist-days', [HomeController::class, 'index']);
         Route::prefix('line-notify/')->name('line-notify.')->group(function () {
             Route::get('', [LineNotifyController::class, 'index'])->name('index');

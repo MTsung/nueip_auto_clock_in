@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SaveSettingRequest;
+use App\Service\CalendarDateService;
 use App\Service\ClockLogService;
 use Carbon\Carbon;
 use Exception;
@@ -12,10 +13,12 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     private $clockLogService;
+    private $calendarDateService;
 
-    public function __construct(ClockLogService $clockLogService)
+    public function __construct(ClockLogService $clockLogService, CalendarDateService $calendarDateService)
     {
         $this->clockLogService = $clockLogService;
+        $this->calendarDateService = $calendarDateService;
     }
 
     public function index(Request $request)
@@ -23,7 +26,8 @@ class HomeController extends Controller
         $date = Carbon::parse($request->input('date') ?? '')->startOfDay();
         $logs = $this->clockLogService->getLogs(0, $date);
         $setting = Auth::user()->setting;
-        return view('home', compact('logs', 'setting'));
+        $dateStatus = $this->calendarDateService->getDateStatus($date);
+        return view('home', compact('logs', 'setting', 'dateStatus'));
     }
 
     public function saveSetting(SaveSettingRequest $request)

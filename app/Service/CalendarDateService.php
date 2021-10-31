@@ -35,7 +35,7 @@ class CalendarDateService
         for ($date = Carbon::today(); $date <= $endDate; $date->addDay()) {
             $allDate[] = [
                 'date' => $date->toDateString(),
-                'is_work_day' => $resDate->where('date', $date->toDateString())->first()['is_work_day'] ?? 0,
+                'is_work_day' => $resDate->where('date', $date->toDateString())->first()['is_work_day'] ?? 1,
             ];
         }
         collect($allDate)->sortBy('date')->chunk(1000)->map(function ($v) {
@@ -52,7 +52,7 @@ class CalendarDateService
             foreach ($res as $k => $v) {
                 $res[$k] = [
                     'date' => Carbon::parse($v['date'])->toDateString(),
-                    'is_work_day' => $v['isHoliday'] == '是' ? 1 : 0,
+                    'is_work_day' => $v['isHoliday'] == '是' ? 0 : 1,
                 ];
             }
             return $res;
@@ -60,5 +60,10 @@ class CalendarDateService
             Log::error($e->getMessage());
             return [];
         }
+    }
+
+    public function getDateStatus(Carbon $date)
+    {
+        return $this->repository->findByDate($date);
     }
 }

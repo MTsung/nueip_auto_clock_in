@@ -15,7 +15,7 @@ class ClockLogService
         $this->repository = $repository;
     }
 
-    public function getLogs($id = 0, Carbon $date)
+    public function getLogs($id = 0, Carbon $date = null)
     {
         return $this->repository->getLogs($id ?: Auth::id(), $date);
     }

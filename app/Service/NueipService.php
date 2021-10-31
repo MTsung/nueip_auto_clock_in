@@ -75,10 +75,8 @@ class NueipService
             'id' => 1,
             'attendance_time' => Carbon::now()->toDateTimeString(),
             'token' => $token,
-            // TODO: $this->user->setting->lat
-            'lat' => '25.0776031',
-            // TODO: $this->user->setting->lng
-            'lng' => '121.5751335',
+            'lat' => $this->user->setting->lat,
+            'lng' => $this->user->setting->lng,
         ];
         $this->callApi($fromData);
     }
@@ -93,10 +91,8 @@ class NueipService
             'id' => 2,
             'attendance_time' => Carbon::now()->toDateTimeString(),
             'token' => $token,
-            // TODO: $this->user->setting->lat
-            'lat' => '25.0776031',
-            // TODO: $this->user->setting->lng
-            'lng' => '121.5751335',
+            'lat' => $this->user->setting->lat,
+            'lng' => $this->user->setting->lng,
         ];
         $this->callApi($fromData);
     }
@@ -126,10 +122,16 @@ class NueipService
             $params = [
                 "message" => "\n" . $res['message'] . "\n" . $res['datetime'],
             ];
-            // TODO: $this->user->setting->notify_token
-            $this->lineNotifyService->snedNotify('yAPhB4n3Pot9gNWYHyHLn3thXUMEUe1S8uyBKtGbIPi', $params);
+            if ($this->user->setting->notify_token) {
+                $this->lineNotifyService->snedNotify($this->user->setting->notify_token, $params);
+            }
         } catch (Exception $e) {
             Log::error($e->getMessage());
+            if ($this->user->setting->notify_token) {
+                $this->lineNotifyService->snedNotify($this->user->setting->notify_token, [
+                    "message" => "\n不明原因失敗",
+                ]);
+            }
         }
     }
 
