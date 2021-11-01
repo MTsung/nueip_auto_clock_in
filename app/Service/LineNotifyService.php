@@ -34,7 +34,7 @@ class LineNotifyService
             "Authorization:	Bearer " . $token,
             "Content-Type: multipart/form-data",
         ];
-        if ($data["imageFile"]) {
+        if (isset($data["imageFile"]) && $data["imageFile"]) {
             $data["imageFile"] = curl_file_create($data["imageFile"]);
         }
 
