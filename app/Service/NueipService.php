@@ -100,7 +100,6 @@ class NueipService
     public function callApi($fromData)
     {
         Log::info($this->clockUrl, [$fromData]);
-        return false;
         try {
             $client = new Client(['timeout' => 5, 'verify' => false]);
             $res = $client->post($this->clockUrl, [
