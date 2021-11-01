@@ -123,13 +123,13 @@ class NueipService
             $params = [
                 "message" => "\n" . $res['message'] . "\n" . $res['datetime'],
             ];
-            if ($this->user->setting->notify_token) {
-                $this->lineNotifyService->snedNotify($this->user->setting->notify_token, $params);
+            if ($this->user->setting->line_notify_token) {
+                $this->lineNotifyService->snedNotify($this->user->setting->line_notify_token, $params);
             }
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            if ($this->user->setting->notify_token) {
-                $this->lineNotifyService->snedNotify($this->user->setting->notify_token, [
+            if ($this->user->setting->line_notify_token) {
+                $this->lineNotifyService->snedNotify($this->user->setting->line_notify_token, [
                     "message" => "\n不明原因失敗",
                 ]);
             }
