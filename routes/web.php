@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClockController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LineNotifyController;
 use App\Http\Controllers\LogController;
@@ -28,10 +29,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('home', [HomeController::class, 'index'])->name('home');
     Route::post('home', [HomeController::class, 'saveSetting'])->name('saveSetting');
     Route::prefix('setting/')->name('setting.')->group(function () {
+        Route::get('clock', [ClockController::class, 'index'])->name('clock');
+        Route::post('clock', [ClockController::class, 'saveSetting'])->name('saveSetting');
         Route::get('nueip', [NueipController::class, 'index'])->name('nueip');
         Route::post('nueip', [NueipController::class, 'save']);
-        // TODO: 獨立不打卡日
-        Route::get('blacklist-days', [HomeController::class, 'index']);
         Route::prefix('line-notify/')->name('line-notify.')->group(function () {
             Route::get('', [LineNotifyController::class, 'index'])->name('index');
             Route::get('bind', [LineNotifyController::class, 'bind'])->name('bind');

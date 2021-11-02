@@ -61,6 +61,9 @@
                                     <a class="dropdown-item" href="{{ route('setting.nueip') }}">
                                         {{ __('NUEiP 設定') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('setting.clock') }}">
+                                        {{ __('打卡設定') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('setting.line-notify.index') }}">
                                         {{ __('LINE Notify 綁定') }}
                                     </a>
