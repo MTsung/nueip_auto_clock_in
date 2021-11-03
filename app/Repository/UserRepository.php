@@ -33,4 +33,9 @@ class UserRepository
             ->where('clock_out_time', $time)
             ->pluck('id');
     }
+
+    public function getAll()
+    {
+        return $this->module()->all();
+    }
 }

@@ -22,4 +22,9 @@ class CalendarDateRepository
     {
         return $this->module()->where('date', $date)->first();
     }
+
+    public function getOffDays()
+    {
+        return $this->module()->where('is_work_day', 0)->pluck('date');
+    }
 }

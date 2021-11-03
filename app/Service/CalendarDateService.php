@@ -3,19 +3,23 @@
 namespace App\Service;
 
 use App\Repository\CalendarDateRepository;
+use App\Repository\OffDayRepository;
 use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class CalendarDateService
 {
     private $repository;
+    private $offDayRepository;
     private $url;
 
-    public function __construct(CalendarDateRepository $repository)
+    public function __construct(CalendarDateRepository $repository, OffDayRepository $offDayRepository)
     {
         $this->repository = $repository;
+        $this->offDayRepository = $offDayRepository;
         $this->url = 'https://data.ntpc.gov.tw/api/datasets/308DCD75-6434-45BC-A95F-584DA4FED251/json?size=100&page=';
     }
 
@@ -23,7 +27,6 @@ class CalendarDateService
     {
         $resDate = [];
         $page = 0;
-        $dates = $this->getCalendar($page);
         while ($dates = $this->getCalendar($page)) {
             $resDate = array_merge($resDate, $dates);
             $page++;
@@ -32,7 +35,7 @@ class CalendarDateService
 
         $allDate = [];
         $endDate = Carbon::today()->addYear()->lastOfYear();
-        for ($date = Carbon::today(); $date <= $endDate; $date->addDay()) {
+        for ($date = Carbon::today()->firstOfYear(); $date <= $endDate; $date->addDay()) {
             $allDate[] = [
                 'date' => $date->toDateString(),
                 'is_work_day' => $resDate->where('date', $date->toDateString())->first()['is_work_day'] ?? 1,
@@ -64,6 +67,6 @@ class CalendarDateService
 
     public function getDateStatus(Carbon $date)
     {
-        return $this->repository->findByDate($date);
+        return $this->offDayRepository->findByUserAndDate($date, Auth::id()) ?? $this->repository->findByDate($date);
     }
 }

@@ -217,6 +217,39 @@ class NueipService
         }
     }
 
+    public function getOffDay()
+    {
+        if (!$employee = $this->getEmployee()) {
+            throw new Exception('employee is null');
+        }
+
+        try {
+            $fromData = [
+                'action' => 'list',
+                's_date' => Carbon::today()->toDateString(),
+                'e_date' => '',
+                'employee' => $employee,
+                'resource' => 'all',
+                'qry_no' => '',
+                'filtMethod' => 'all',
+            ];
+            $client = new Client(['timeout' => 5, 'verify' => false]);
+            $res = $client->post($this->personalLeaveApplicationUser, [
+                'headers' => [
+                    'X-Requested-With' => 'xmlhttprequest',
+                ],
+                'form_params' => $fromData,
+                'cookies' => $this->cookie,
+            ]);
+            $res = json_decode($res->getBody()->getContents(), true);
+            Log::info($this->personalLeaveApplicationUser, [$fromData, $res]);
+            return $res['result'];
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return false;
+        }
+    }
+
     private function getEmployee()
     {
         if (!$this->clockLogin()) {

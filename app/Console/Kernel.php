@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\ClockIn;
 use App\Console\Commands\UpgradeCalendarDate;
+use App\Console\Commands\UpgradeOffDay;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,6 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         UpgradeCalendarDate::class,
+        UpgradeOffDay::class,
         ClockIn::class,
     ];
 
@@ -29,6 +31,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('calendar-date:upgrade')->monthly();
         $schedule->command('clock-in')->everyMinute();
+        $schedule->command('off-day:upgrade')->everyThreeHours();
     }
 
     /**
