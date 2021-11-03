@@ -44,6 +44,7 @@ class NueipService
     {
         $this->user = $user;
         $this->isLogin = false;
+        $this->cookie = new CookieJar();
         return $this;
     }
 
