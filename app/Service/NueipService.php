@@ -43,6 +43,7 @@ class NueipService
     public function setUser(User $user)
     {
         $this->user = $user;
+        $this->isLogin = false;
         return $this;
     }
 
