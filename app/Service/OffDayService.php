@@ -36,7 +36,7 @@ class OffDayService
         });
     }
 
-    private function save($user, $res)
+    public function save($user, $res)
     {
         foreach ($res as $item) {
             $endDate = Carbon::parse($item['end_date']);
@@ -50,4 +50,15 @@ class OffDayService
         }
     }
 
+    public function delete($user, $res)
+    {
+        $dates = [];
+        foreach ($res as $item) {
+            $endDate = Carbon::parse($item['end_date']);
+            for ($date = Carbon::parse($item['start_date']); $date <= $endDate; $date->addDay()) {
+                $dates[] = $date->toDateString();
+            }
+        }
+        $this->repository->deleteDatesForUser($user->id, $dates);
+    }
 }

@@ -3,8 +3,8 @@
 use App\Http\Controllers\ClockController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LineNotifyController;
-use App\Http\Controllers\LogController;
 use App\Http\Controllers\NueipController;
+use App\Http\Controllers\OffDayController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('bind', [LineNotifyController::class, 'bind'])->name('bind');
             Route::delete('', [LineNotifyController::class, 'del'])->name('del');
         });
+        Route::post('off-day', [OffDayController::class, 'save'])->name('off-day.save');
+        Route::delete('off-day', [OffDayController::class, 'delete'])->name('off-day.delete');
     });
 });
 

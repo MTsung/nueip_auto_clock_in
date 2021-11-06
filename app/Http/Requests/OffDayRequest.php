@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Crypt;
 
-class NueipRequest extends FormRequest
+class OffDayRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,18 +24,14 @@ class NueipRequest extends FormRequest
     public function rules()
     {
         return [
-            'company' => 'required',
-            'account' => 'required',
-            'password' => 'required',
+            'date' => 'required|date_format:Y-m-d',
         ];
     }
 
     public function attributes()
     {
         return [
-            'company' => '公司代碼',
-            'account' => '員工編號',
-            'password' => '密碼',
+            'date' => '日期',
         ];
     }
 
@@ -44,9 +39,10 @@ class NueipRequest extends FormRequest
     {
         $data = parent::all();
         return [
-            'company' => $data['company'],
-            'account' => $data['account'],
-            'password' => Crypt::encryptString($data['password']),
+            [
+                'start_date' => $data['date'],
+                'end_date' => $data['date'],
+            ],
         ];
     }
 }

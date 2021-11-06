@@ -8,9 +8,33 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card mb-3">
-                <div class="card-header">
+                <div class="card-header" style="min-height: 53px">
                     @if (isset($dateStatus->date))
-                        {{ $dateStatus->date }} ({{ $dateStatus->is_work_day ? '工作日' : '休假' }})
+                        {{ $dateStatus->date }} ({{ $dateStatus->is_work_day ? __('工作日') : __('休假') }})
+                        @if ($dateStatus->is_work_day)
+                            <button class="btn btn-sm btn-success"
+                                onclick="event.preventDefault();document.getElementById('save-form').submit();">
+                                {{ __('設定排除打卡日') }}
+                            </button>
+                            <form id="save-form" action="{{ route('setting.off-day.save') }}" method="POST"
+                                class="d-none">
+                                <input type="hidden" name="date" value="{{ $dateStatus->date }}">
+                                @csrf
+                            </form>
+                        @elseif ($dateStatus->is_by_user ?? 0)
+                            <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom"
+                                title="{{ __('若是已在 NUEiP 系統請假，就算移除，排程也會定期寫入回。') }}"
+                                onclick="event.preventDefault();document.getElementById('del-form').submit();">
+                                {{ __('移除排除打卡日') }}
+                            </button>
+
+                            <form id="del-form" action="{{ route('setting.off-day.delete') }}" method="POST"
+                                class="d-none">
+                                {{ method_field('DELETE') }}
+                                <input type="hidden" name="date" value="{{ $dateStatus->date }}">
+                                @csrf
+                            </form>
+                        @endif
                     @else
                         {{ request('date') ?? Carbon\Carbon::today()->toDateString() }}
                     @endif
@@ -60,13 +84,19 @@
             dateFormat: "Y-m-d",
             enableTime: false,
             inline: true,
-            onChange: function (selectedDates, dateStr, instance) {
+            minDate: '2021-01-01',
+            maxDate: '{{ Carbon\Carbon::today()->addYear()->lastOfYear()->toDateString() }}',
+            onChange: function(selectedDates, dateStr, instance) {
                 location.href = '{{ route('home') }}?date=' + formatDate(selectedDates[0]);
             },
-            onDayCreate: function (dObj, dStr, fp, dayElem) {
-                console.log(offDays.indexOf(formatDate(dayElem.dateObj)));
+            onDayCreate: function(dObj, dStr, fp, dayElem) {
                 if (offDays.indexOf(formatDate(dayElem.dateObj)) !== -1) {
-                    dayElem.innerHTML = "<span style='color: #f64747'>"+dayElem.innerHTML+"</span>";
+                    if (dayElem.classList.contains('nextMonthDay') || dayElem.classList.contains(
+                            'prevMonthDay')) {
+                        dayElem.innerHTML = "<span style='color: #ffc7c7'>" + dayElem.innerHTML + "</span>";
+                    } else {
+                        dayElem.innerHTML = "<span style='color: #f64747'>" + dayElem.innerHTML + "</span>";
+                    }
                 }
             }
         });
@@ -84,5 +114,8 @@
 
             return [year, month, day].join('-');
         }
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
     </script>
 @endsection
