@@ -49,6 +49,9 @@ class ClockIn extends Command
             return Command::SUCCESS;
         }
 
+        // 打卡前睡 CLOCK_SLEEP_MIN_SECONDS ~ CLOCK_SLEEP_MAX_SECONDS 秒
+        sleep(rand(env('CLOCK_SLEEP_MIN_SECONDS', 1), env('CLOCK_SLEEP_MAX_SECONDS', 25)));
+
         $now = Carbon::now()->format('H:i:00');
         $userService = app(UserService::class);
         $userService->getClockInUserIds($now)->map(function ($id) {
