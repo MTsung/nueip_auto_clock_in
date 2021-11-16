@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\User;
 use App\Repository\ClockLogRepository;
+use App\Repository\OffDayRepository;
 use Carbon\Carbon;
 use DOMDocument;
 use DOMXPath;
@@ -25,13 +26,15 @@ class NueipService
     private $nueipUserService;
     private $lineNotifyService;
     private $clockLogRepository;
+    private $offDayRepository;
     private $user;
 
-    public function __construct(NueipUserService $nueipUserService, LineNotifyService $lineNotifyService, ClockLogRepository $clockLogRepository)
+    public function __construct(NueipUserService $nueipUserService, LineNotifyService $lineNotifyService, ClockLogRepository $clockLogRepository, OffDayRepository $offDayRepository)
     {
         $this->nueipUserService = $nueipUserService;
         $this->lineNotifyService = $lineNotifyService;
         $this->clockLogRepository = $clockLogRepository;
+        $this->offDayRepository = $offDayRepository;
         $this->loginUrl = 'https://cloud.nueip.com/login/index/param';
         $this->loginSuccessUrl = 'https://cloud.nueip.com/home';
         $this->clockUrl = 'https://cloud.nueip.com/time_clocks/ajax';
@@ -188,6 +191,10 @@ class NueipService
     // 抓是否請假
     private function isOffDay()
     {
+        if (!is_null($this->offDayRepository->findByUserAndDate(Carbon::today(), $this->user->id))){
+            return true;
+        }
+
         if (!$employee = $this->getEmployee()) {
             throw new Exception('employee is null');
         }
