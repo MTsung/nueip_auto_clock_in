@@ -20,7 +20,7 @@ class CalendarDateService
     {
         $this->repository = $repository;
         $this->offDayRepository = $offDayRepository;
-        $this->url = 'https://data.ntpc.gov.tw/api/datasets/308DCD75-6434-45BC-A95F-584DA4FED251/json?size=100&page=';
+        $this->url = 'https://data.ntpc.gov.tw/api/datasets/308DCD75-6434-45BC-A95F-584DA4FED251/json?size=2500&page=';
     }
 
     public function upgrade()
@@ -55,7 +55,7 @@ class CalendarDateService
             foreach ($res as $k => $v) {
                 $res[$k] = [
                     'date' => Carbon::parse($v['date'])->toDateString(),
-                    'is_work_day' => $v['isHoliday'] == '是' ? 0 : 1,
+                    'is_work_day' => $v['isholiday'] == '是' ? 0 : 1,
                 ];
             }
             return $res;
